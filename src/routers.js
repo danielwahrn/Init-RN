@@ -3,9 +3,10 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import {StyleSheet, View, Text} from 'react-native';
 import {RecentPage, ReceiptPage, QRCodePage, CategoryPage, SettingsPage} from './screens/index';
-
+import HamburgerMenu from './components/HamburgerMenu'
 // import TabBarIcon from './components/Icons/ImageIcons';
 import * as Icons from './components/Icons/Icons';
 
@@ -77,25 +78,14 @@ const CategoryStackNavigator = createStackNavigator({
       }),
 })
 
-const SettingsStackNavigator = createStackNavigator({
+const SettingsDrawerNavigator = createDrawerNavigator({
     Settings: {
         screen: SettingsPage
     }
-}, {
-    navigationOptions: ({focused, navigation, screenProps}) => ({
-        tabBarLabel: '',
-        tabBarIcon: ({focused, tintColor}) => (
-            <Icons.Settings color={tintColor}/>
-        ),
-    }),
+},{
+    drawerWidth: 160,
+    contentComponent: HamburgerMenu
 })
-
-SettingsStackNavigator.navigatioOptions = {
-    tabBarLabel: 'Settings',
-    tabBarIcon: ({focused, tintColor}) => (
-        <Icons.Settings  color={tintColor}/>
-    )
-}
 
 const TabNavigator = createBottomTabNavigator({
     Recent: {
@@ -111,7 +101,13 @@ const TabNavigator = createBottomTabNavigator({
         screen: CategoryStackNavigator
     },
     Settings: {
-        screen: SettingsStackNavigator
+        screen: SettingsDrawerNavigator,
+        navigationOptions: ({focused, navigation, screenProps}) => ({
+            tabBarLabel: '',
+            tabBarIcon: ({focused, tintColor}) => (
+                <Icons.Settings color={tintColor}/>
+            ),
+        }),
     }
 },{
     initialRouteName: 'Recent',
